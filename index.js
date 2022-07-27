@@ -49,5 +49,6 @@ app.listen(port, () => {console.log(`Example app listening on port ${port}`)})
 
 //github올리기
 //git add . (staging area에 올라감)
-//git statusv (뭐가 올려졌는지 보여줌)
-//git commint -m "메시지" ()
+//git status (뭐가 올려졌는지 보여줌)
+//git commint -m "메시지" (git repository, LOCAL에 올라감)
+//git push origin master (gir repository, REMOTE = github에 올라감)
