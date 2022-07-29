@@ -19,18 +19,16 @@ mongoose.connect(config.mongoURI, {   //config.mongoURI(비밀)
 }).then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err))
 
-//mongodb+srv://jiwon:<password>@cluster0.yp52q.mongodb.net/?retryWrites=true&w=majority
-
-
-
 app.get('/', (req, res) => {res.send('Hello World! WOW~')})
 
 app.post('/register', (req,res) => {  //post 매소드이용
 
   //회원 가입 할때 필요한 정보들을 client에서 가져오면
   //그것들을 데이터 베이스에 넣어준다. (5번째 줄)
-  
+
   const user = new User(req.body) 
+  //모든정보들을 모델에 넣어주고, user.save를 하기전에, 비밀번호 암호화가 필요(User.js)
+
   user.save((err, userInfo) => {  //mongoDB에서의 매소드, 정보들이 user모델에 저장됨
     if(err) return res.json({ success: false, err}) //error가 있으면 client에 전달(json형식으로+에러메시지도 전달)
     return res.status(200).json({
@@ -38,6 +36,40 @@ app.post('/register', (req,res) => {  //post 매소드이용
     })
   }) 
 })
+
+app.post('/login', (req, res) => {
+
+  //요청된 이메일을 데이터베이스에서 있는지 찾기
+  User.findOne({ email: req.body.email }, (err,user) => { 
+    if(!user) {               //이메일에 해당하는 유저가 하나도 없다면
+      return res.json({       
+        loginSuccess: false,  
+        message: "제공된 이메일에 해당하는 유저가 없습니다."
+      })
+    }
+
+    //요청된 이메일이 데이터베이스에 있다면 비밀번호가 맞는 비밀번호인지 확인
+    user.comparePassword(req.body.password , (err, isMatch ) => {
+      if (!isMatch)
+        return res.json({
+          loginSuccess: false,
+          message: "비밀번호가 틀렸습니다."
+        })
+      
+      //비밀번호까지 맞다면 토큰을 생성하기
+      user.generateToken((err, user) => {
+        
+      })
+        
+      
+
+
+    })
+
+  })
+
+})
+
 
 
 app.listen(port, () => {console.log(`Example app listening on port ${port}`)})
