@@ -29,10 +29,7 @@ app.post('/register', (req,res) => {  //post 매소드이용
 
   //회원 가입 할때 필요한 정보들을 client에서 가져오면
   //그것들을 데이터 베이스에 넣어준다. (5번째 줄)
-
-
   
-
   const user = new User(req.body) 
   user.save((err, userInfo) => {  //mongoDB에서의 매소드, 정보들이 user모델에 저장됨
     if(err) return res.json({ success: false, err}) //error가 있으면 client에 전달(json형식으로+에러메시지도 전달)
