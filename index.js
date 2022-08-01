@@ -3,10 +3,11 @@ const app = express()
 const port = 3000
 const bodyParser = require('body-parser'); 
 const cookieParser = require('cookie-parser');
-
 const config = require('./config/key');
 
-const { User } = require("./models/User"); //User.js의 정보 가져오기
+
+const { auth } = require('./middleware/auth');
+const { User } = require("./models/User");
 
 //body-Parser가 client에서 오는 정보를 서버에서 분석하여 가져오도록 하기
 //application/x-www-form-urlencoded
@@ -25,7 +26,7 @@ mongoose.connect(config.mongoURI, {   //config.mongoURI(비밀)
 
 app.get('/', (req, res) => {res.send('Hello World! WOW~')})
 
-app.post('/register', (req,res) => {  //post 매소드이용
+app.post('/api/users/register', (req,res) => {  //post 매소드이용
 
   //회원 가입 할때 필요한 정보들을 client에서 가져오면
   //그것들을 데이터 베이스에 넣어준다. (5번째 줄)
@@ -41,7 +42,7 @@ app.post('/register', (req,res) => {  //post 매소드이용
   }) 
 })
 
-app.post('/login', (req, res) => {
+app.post('/api/users/login', (req, res) => {
 
   //요청된 이메일을 데이터베이스에서 있는지 찾기
   User.findOne({ email: req.body.email }, (err,user) => { 
@@ -73,6 +74,14 @@ app.post('/login', (req, res) => {
         
     })
   })
+})
+
+
+app.get('/api/users/auth', auth ,(req,res) => {
+  
+  //여기까지 미들웨어를 통과해 왔다는 얘기는 Authentication이 True 라는 말
+  
+
 })
 
 app.listen(port, () => {console.log(`Example app listening on port ${port}`)})
