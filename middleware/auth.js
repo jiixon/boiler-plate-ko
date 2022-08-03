@@ -11,14 +11,10 @@ let auth = (req, res, next) => {
         if(err) throw err;
         if(!user) return res.json({ isAuth: false, error: true})
 
-        req.token = token;
+        req.token = token; //user가 있는 경우
         req.user = user;
         next();
     })
-
-    //유저가 있으면 인증 Okay
-
-    //유저가 없으면 인증 No!
 
 }
 module.exports = { auth }; 

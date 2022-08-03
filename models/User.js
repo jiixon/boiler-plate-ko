@@ -103,3 +103,4 @@ userSchema.statics.findByToken = function(token, cb) {
 const User = mongoose.model('User',userSchema) //('모델이름',스키마이름)
 
 module.exports = {User}
+
