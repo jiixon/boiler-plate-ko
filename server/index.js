@@ -28,6 +28,11 @@ mongoose.connect(config.mongoURI, {   //config.mongoURI(비밀)
 
 app.get('/', (req, res) => {res.send('Hello World! WOW~')})
 
+app.get('/api/hello',(req,res) => {
+  res.send("안녕하세요~")
+})
+
+
 app.post('/api/users/register', (req,res) => {
 
 })
